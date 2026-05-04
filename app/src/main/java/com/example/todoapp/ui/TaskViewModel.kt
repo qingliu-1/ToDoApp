@@ -12,7 +12,7 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     // 将数据层的 Flow 转成 LiveData
     // LiveData 会被 Activity 观察，数据一变 UI 就自动更新
-    val task: LiveData<List<Task>> = repository.allTasks.asLiveData()
+    val tasks: LiveData<List<Task>> = repository.allTasks.asLiveData()
 
     //    添加任务
     fun addTask(title: String) {

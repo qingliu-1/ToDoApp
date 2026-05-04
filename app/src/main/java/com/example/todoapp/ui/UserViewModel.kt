@@ -1,5 +1,6 @@
 package com.example.todoapp.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,13 +47,15 @@ class UserViewModel(private val repository: UserRepository): ViewModel() {
             isLoading.value = true
             // 先查一下该账号是否已被注册
             val existUser = repository.isAccountExist(account)
-            if (existUser != null) {
+            Log.d("tag","$existUser")
+            if (existUser) {
                 errorMessage.value = "该账号已被注册"
                 isLoading.value = false
                 return@launch
             }
             // 没被注册，创建新用户并插入数据库
             repository.register(UserTask(account = account, password = password))
+            Log.d("tag","${repository.register(UserTask(account=account, password = password))}")
             errorMessage.value = "注册成功，请登录"
             isLoading.value = false
         }
