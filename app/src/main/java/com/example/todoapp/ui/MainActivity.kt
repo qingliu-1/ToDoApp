@@ -56,9 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
 //      弹出对话框，输入任务标题并添加
-
     private fun showAddTaskDialog() {
         val input = EditText(this)  // 创建一个输入框
         AlertDialog.Builder(this)

@@ -30,8 +30,8 @@ class RegisterActivity : AppCompatActivity() {
         }
         // 初始化 UserViewModel
         val userDao = AppDatabase.DatabaseClient.getDatabase(this).userDao()
-        val userRepo = UserRepository(userDao)
-        userViewModel = ViewModelProvider(this, UserViewModelFactory(userRepo))
+        val userRepository = UserRepository(userDao)
+        userViewModel = ViewModelProvider(this, UserViewModelFactory(userRepository))
             .get(UserViewModel::class.java)
 
         // 观察注册结果
