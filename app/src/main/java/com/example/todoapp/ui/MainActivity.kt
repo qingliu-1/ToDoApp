@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todoapp.adapter.SimpleItemTouchHelperCallback
 import com.example.todoapp.adapter.TaskAdapter
 import com.example.todoapp.data.AppDatabase
 import com.example.todoapp.data.Task
@@ -38,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
+
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         // 初始化数据库、仓库、ViewModel
         val dao = AppDatabase.DatabaseClient.getDatabase(this).taskDao()
@@ -82,7 +88,9 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("删除") { _, _ ->
                 viewModel.deleteTask(task)       // 确认删除
             }
-            .setNegativeButton("取消", null)
+            .setNegativeButton("取消"){_, _ ->
+                adapter.notifyItemChanged(adapter.currentList.indexOf(task))
+            }
             .show()
     }
 }

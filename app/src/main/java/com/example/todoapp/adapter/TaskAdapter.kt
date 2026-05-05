@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.data.Task
 import com.example.todoapp.databinding.ItemTaskLayoutBinding
+import java.util.Collections
 
 class TaskAdapter(private val onDeleteClick:(Task)-> Unit,
                   private val onPinClick:(Task)-> Unit,
                   private val onDoneClick:(Task)-> Unit
-                 ) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallback()) {
+                 ) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallback()),
+    ItemTouchHelperAdapter {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -31,16 +34,20 @@ class TaskAdapter(private val onDeleteClick:(Task)-> Unit,
         holder.bind(getItem(position))
     }
 
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+    }
+
+    override fun onItemDismiss(position: Int) {
+        val task = getItem(position)
+        onDeleteClick(task)
+    }
+
 
     inner class TaskViewHolder(private val binding: ItemTaskLayoutBinding) :
         RecyclerView.ViewHolder(binding.root){
         fun bind(task: Task) {
             binding.tvTitle.text = task.title
             binding.cbDone.isChecked = task.isDone
-
-            binding.btnDelete.setOnClickListener {
-                onDeleteClick(task)
-            }
 
             binding.btnPin.setOnClickListener {
                 onPinClick(task)
